@@ -95,7 +95,7 @@
 
 1. 它源自多年的经验和众多大大小小的 Django 项目
 1. 它是务实的。这里提到的所有做法都经过了生产环境的检验
-1. 它是有明确观点的（opinionated）。这就是我们使用 Django 构建应用的方式
+1. 它是有明确观点的。这就是我们使用 Django 构建应用的方式
 1. 它不是唯一的方式。还有其他构建和组织 Django 项目的方法，同样可以胜任
 1. 我们有一个 [`Django-Styleguide-Example`](https://github.com/HackSoftware/Django-Styleguide-Example)，在真实项目中演示了本指南的大部分内容
 
@@ -159,7 +159,7 @@ Django Styleguide 的核心可以归纳如下：
 
 通用 API 和视图配合序列化器、表单，对于"对某个模型做直接 CRUD"这种简单场景确实非常好用
 
-但根据我们迄今的经验，这种简单场景其实很少出现。**一旦你偏离了愉快的 CRUD 路径，事情就会开始变得混乱。**
+但根据我们迄今的经验，这种简单场景其实很少出现。**一旦你偏离了愉快的 CRUD 路径，事情就会开始变得混乱**
 
 而一旦事情开始混乱，你就需要更多的"盒子"，以便更好地组织代码
 
@@ -170,28 +170,28 @@ Django Styleguide 的核心可以归纳如下：
 
 另外，多亏了这条评论——https://github.com/HackSoftware/Django-Styleguide/issues/170 ——还有一种额外的视角来看待这个问题：
 
-你的应用应该如何运转（也就是我们所说的"业务逻辑"），不应该与你访问它的方式（无论是 API、管理命令还是别的什么）耦合在一起，而这条界线非常清晰，正是我们想要做关注点分离的地方。
+你的应用应该如何运转（也就是我们所说的"业务逻辑"），不应该与你访问它的方式（无论是 API、管理命令还是别的什么）耦合在一起，而这条界线非常清晰，正是我们想要做关注点分离的地方
 
-当然，确实存在一些场景，两者会交织在一起。但思考这种分离时，一个好的思考基线是——"核心"（core） vs. "接口"（interface）
+当然，确实存在一些场景，两者会交织在一起。但思考这种分离时，一个好的思考基线是——"核心"vs. "接口"
 
 ---
 
-> 🤔 为什么不把业务逻辑放在自定义管理器（managers）和/或查询集（querysets）里？
+> 🤔 为什么不把业务逻辑放在自定义管理器和/或查询集里？
 
 这其实是个不错的主意，你完全可以引入自定义管理器和查询集，暴露出更贴合你领域模型的 API
 
 但是，试图把所有业务逻辑都塞进自定义管理器并不是个好主意，原因如下：
 
-1. 业务逻辑有自己的领域，它并不总是能直接映射到你的数据模型（models）上
+1. 业务逻辑有自己的领域，它并不总是能直接映射到你的数据模型上
 1. 业务逻辑往往横跨多个模型，所以你很难选择该把某段逻辑放在哪里
    - 假设你有一段自定义逻辑，涉及模型 `A`、`B`、`C` 和 `D`，你该把它放在哪儿？
 1. 可能还会涉及对第三方系统的额外调用。你不会希望这些调用出现在自定义管理器的方法里
 
-**核心思路是：让你的领域逻辑独立于数据模型和 API 层存在。**
+**核心思路是：让你的领域逻辑独立于数据模型和 API 层存在**
 
-如果把"使用自定义 queryset/manager"的想法和"让领域逻辑独立存在"的想法结合起来，最终得到的产物就是我们所说的"服务层"（service layer）
+如果把"使用自定义 queryset/manager"的想法和"让领域逻辑独立存在"的想法结合起来，最终得到的产物就是我们所说的"服务层"
 
-**服务可以是函数、类、模块，或任何对你特定场景有意义的形式。**
+**服务可以是函数、类、模块，或任何对你特定场景有意义的形式**
 
 话虽如此，自定义管理器和查询集是非常强大的工具，应该用来为你的模型暴露更好的接口
 
@@ -539,13 +539,13 @@ def user_create(
     return user
 ```
 
-如你所见，这个服务调用了另外两个服务——`profile_create` 和 `confirmation_email_send`。
+如你所见，这个服务调用了另外两个服务——`profile_create` 和 `confirmation_email_send`
 
-在这个例子中，与用户创建相关的所有逻辑都集中在一个地方，可以被追踪。
+在这个例子中，与用户创建相关的所有逻辑都集中在一个地方，可以被追踪
 
 ### 示例 - 基于类的服务
 
-**此外，我们还可以有"基于类的"服务**，用花哨点的话说就是——把逻辑包裹在一个类里。
+**此外，我们还可以有"基于类的"服务**，用花哨点的话说就是——把逻辑包裹在一个类里
 
 下面是一个直接取自 [Django Styleguide Example](https://github.com/HackSoftware/Django-Styleguide-Example/blob/master/styleguide_example/files/services.py#L22) 的示例，与文件上传相关：
 
@@ -617,7 +617,7 @@ class FileStandardUploadService:
 
 正如注释中所说，我们采用这种做法主要出于两个原因：
 
-1. **命名空间。** 我们的 create 和 update 共处同一个命名空间
+1. **命名空间** 我们的 create 和 update 共处同一个命名空间
 1. **复用** `_infer_file_name_and_type` 这段逻辑
 
 下面是这个服务的用法：
@@ -727,7 +727,7 @@ class FileDirectUploadService:
 
 ### 命名约定
 
-命名约定取决于你的口味。在整个项目中保持一致的约定会带来回报。
+命名约定取决于你的口味。在整个项目中保持一致的约定会带来回报
 
 以上面的例子来说，我们的服务命名为 `user_create`。其模式是——`<实体>_<动作>`
 
@@ -738,11 +738,11 @@ class FileDirectUploadService:
 
 ### 模块
 
-如果你的 Django 应用足够简单、只有一堆服务，它们可以愉快地全部住在 `service.py` 模块里。
+如果你的 Django 应用足够简单、只有一堆服务，它们可以愉快地全部住在 `service.py` 模块里
 
-但当规模变大时，你可能想把 `services.py` 拆分成一个包含子模块的文件夹，按照应用中不同的子领域来划分。
+但当规模变大时，你可能想把 `services.py` 拆分成一个包含子模块的文件夹，按照应用中不同的子领域来划分
 
-举个例子，假设我们有一个 `authentication` 应用，在 `services` 模块中有 1 个处理 `jwt` 的子模块，以及一个处理 `oauth` 的子模块。
+举个例子，假设我们有一个 `authentication` 应用，在 `services` 模块中有 1 个处理 `jwt` 的子模块，以及一个处理 `oauth` 的子模块
 
 结构可能长这样：
 
@@ -782,13 +782,13 @@ def user_list(*, fetched_by: User) -> Iterable[User]:
     return User.objects.filter(query)
 ```
 
-如你所见，`user_get_visible_for` 是另一个选择器。
+如你所见，`user_get_visible_for` 是另一个选择器
 
-你可以返回查询集、列表，或任何对你具体场景有意义的东西。
+你可以返回查询集、列表，或任何对你具体场景有意义的东西
 
 ### 测试
 
-由于服务承载着我们的业务逻辑，它们是测试的理想对象。
+由于服务承载着我们的业务逻辑，它们是测试的理想对象
 
 如果你决定用测试覆盖服务层，我们有几条大致的经验法则：
 
@@ -799,11 +799,11 @@ def user_list(*, fetched_by: User) -> Iterable[User]:
 在为某个测试创建所需的状态时，可以组合使用：
 
 - 假数据（Fakes，我们推荐使用 [`faker`](https://github.com/joke2k/faker)）
-- 其他服务，用来创建所需的对象。
-- 专门的测试工具与辅助方法。
+- 其他服务，用来创建所需的对象
+- 专门的测试工具与辅助方法
 - 工厂（Factories，我们推荐使用 [`factory_boy`](https://factoryboy.readthedocs.io/en/latest/orms.html)）
-- 如果项目还没引入工厂，就直接用 `Model.objects.create()` 调用。
-- 总之，什么顺手用什么。
+- 如果项目还没引入工厂，就直接用 `Model.objects.create()` 调用
+- 总之，什么顺手用什么
 
 **我们来看看示例中的这个服务：**
 
@@ -958,7 +958,7 @@ class ItemBuyTests(TestCase):
 对我们来说，使用类来写 API / 视图带来的额外好处是：
 
 1. 你可以继承一个 `BaseApi`，或者添加 mixin
-   - 如果使用基于函数的 API / 视图，你也得做同样的事，只是要用装饰器。
+   - 如果使用基于函数的 API / 视图，你也得做同样的事，只是要用装饰器
 2. 类创建了一个命名空间，你可以在里面嵌套东西（属性、方法等）
    - 额外的 API 配置可以通过类属性完成
    - 而在基于函数的 API / 视图中，你需要堆叠装饰器
@@ -1602,7 +1602,7 @@ DRF 有一份关于异常处理机制的优秀指南，务必先读一读 - <htt
 
 基本上，如果异常处理器无法处理某个异常并返回 `None`，就会产生一个未处理异常和 `500 Server Error`。这通常是好事，因为你不会把需要注意的错误静默吞掉
 
-**不过，有一些怪癖需要我们注意。**
+**不过，有一些怪癖需要我们注意**
 
 #### DRF 的 `ValidationError`
 
@@ -1664,9 +1664,9 @@ def some_service():
 
 到目前为止，DRF 的默认行为可能返回：
 
-- 一个数组。
-- 一个字典。
-- 一个特定的 `{"detail": "something"}` 结果。
+- 一个数组
+- 一个字典
+- 一个特定的 `{"detail": "something"}` 结果
 
 **所以如果我们要用 DRF 的默认行为，就需要处理这种不一致性**
 
@@ -2785,7 +2785,7 @@ def user_update(*, user: User, data) -> User:
 
 - [Dan Palmer - Scaling Django to 500 apps (DjangoCon US 2021)](https://www.youtube.com/watch?v=NsHo-kThlqI)
 - [Django API Domains](https://phalt.github.io/django-api-domains/)
-- [Y Combinator News 上围绕 Django Styleguide 的讨论](https://news.ycombinator.com/item?id=34337667)——你可能会在这里发现更多有用的东西。
+- [Y Combinator News 上围绕 Django Styleguide 的讨论](https://news.ycombinator.com/item?id=34337667)——你可能会在这里发现更多有用的东西
 
 ## 灵感来源
 
@@ -2794,4 +2794,4 @@ def user_update(*, user: User, data) -> User:
 - **关注点分离**的总体理念
 - [Boundaries by Gary Bernhardt](https://www.youtube.com/watch?v=yTkzNHF6rMs)
 - Rails 的服务对象（service objects）
-- 最近，我看到了 [Cognitive Load is what matters](https://github.com/zakirullin/cognitive-load) 这篇文章，深有共鸣。其中提到的一些东西也是 Django Styleguide 的关键理念。
+- 最近，我看到了 [Cognitive Load is what matters](https://github.com/zakirullin/cognitive-load) 这篇文章，深有共鸣。其中提到的一些东西也是 Django Styleguide 的关键理念
